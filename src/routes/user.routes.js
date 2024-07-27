@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { registerUser } from "../controllers/user.controller.js";
+import {loginUser, logoutUser, refreshAccesstoken, registerUser } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import {ApiError} from '../utils/ApiError.js'
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -20,6 +21,14 @@ router.route("/register").post(
     ]),//fields array accept karta hai
     registerUser
 )
+
+router.route("/login").post(loginUser)
+
+
+//here verifyJwt is a middleware which gets executed before logout user
+router.route("/logout").post(verifyJWT,logoutUser)
+
+router.route("/refreshToken").post(refreshAccesstoken)
 
 
 
